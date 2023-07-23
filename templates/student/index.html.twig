@@ -10,6 +10,9 @@
             <tr>
                 <th>Uid</th>
                 <th>Name</th>
+                <th>Lot</th>
+                <th>City</th>
+                <th>CP</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -18,6 +21,9 @@
             <tr>
                 <td>{{ student.uid }}</td>
                 <td>{{ student.name }}</td>
+                <td>{{ student.address.lot }}</td>
+                <td>{{ student.address.city }}</td>
+                <td>{{ student.address.cp }}</td>
                 <td>
                     <a href="{{ path('app_student_show', {'uid': student.uid}) }}">show</a>
                     <a href="{{ path('app_student_edit', {'uid': student.uid}) }}">edit</a>

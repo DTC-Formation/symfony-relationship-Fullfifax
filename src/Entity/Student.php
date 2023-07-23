@@ -20,6 +20,9 @@ class Student
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
     private ?Address $address = null;
 
+    #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    private ?Contact $contact = null;
+
     public function __construct()
     {
         $this->uid = Uuid::v4();
@@ -55,6 +58,23 @@ class Student
         }
 
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+
+    public function setContact(Contact $contact): static
+    {
+        // set the owning side of the relation if necessary
+        if ($contact->getStudent() !== $this) {
+            $contact->setStudent($this);
+        }
+
+        $this->contact = $contact;
 
         return $this;
     }

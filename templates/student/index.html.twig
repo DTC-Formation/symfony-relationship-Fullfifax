@@ -13,6 +13,9 @@
                 <th>Lot</th>
                 <th>City</th>
                 <th>CP</th>
+                <th>Phone</th>
+                <th>Email</th>
+                <th>Linkedin</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -24,6 +27,9 @@
                 <td>{{ student.address.lot }}</td>
                 <td>{{ student.address.city }}</td>
                 <td>{{ student.address.cp }}</td>
+                <td>{{ student.contact.phone }}</td>
+                <td>{{ student.contact.email }}</td>
+                <td>{{ student.contact.linkedin }}</td>
                 <td>
                     <a href="{{ path('app_student_show', {'uid': student.uid}) }}">show</a>
                     <a href="{{ path('app_student_edit', {'uid': student.uid}) }}">edit</a>

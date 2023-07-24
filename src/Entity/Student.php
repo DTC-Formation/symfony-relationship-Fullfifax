@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StudentRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -23,9 +25,17 @@ class Student
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
     private ?Contact $contact = null;
 
+    #[ORM\OneToMany(mappedBy: 'student', targetEntity: Experience::class, orphanRemoval: true)]
+    private Collection $experiences;
+
+    #[ORM\OneToMany(mappedBy: 'student', targetEntity: Education::class, orphanRemoval: true)]
+    private Collection $educations;
+
     public function __construct()
     {
         $this->uid = Uuid::v4();
+        $this->experiences = new ArrayCollection();
+        $this->educations = new ArrayCollection();
     }
 
     public function getUid(): ?Uuid
@@ -75,6 +85,66 @@ class Student
         }
 
         $this->contact = $contact;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Experience>
+     */
+    public function getExperiences(): Collection
+    {
+        return $this->experiences;
+    }
+
+    public function addExperience(Experience $experience): static
+    {
+        if (!$this->experiences->contains($experience)) {
+            $this->experiences->add($experience);
+            $experience->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeExperience(Experience $experience): static
+    {
+        if ($this->experiences->removeElement($experience)) {
+            // set the owning side to null (unless already changed)
+            if ($experience->getStudent() === $this) {
+                $experience->setStudent(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Education>
+     */
+    public function getEducations(): Collection
+    {
+        return $this->educations;
+    }
+
+    public function addEducation(Education $education): static
+    {
+        if (!$this->educations->contains($education)) {
+            $this->educations->add($education);
+            $education->setStudent($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEducation(Education $education): static
+    {
+        if ($this->educations->removeElement($education)) {
+            // set the owning side to null (unless already changed)
+            if ($education->getStudent() === $this) {
+                $education->setStudent(null);
+            }
+        }
 
         return $this;
     }

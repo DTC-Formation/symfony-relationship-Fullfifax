@@ -30,6 +30,15 @@ class StudentController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            foreach ($student->getExperiences() as $experience) {
+                $entityManager->persist($experience);
+            }
+
+            foreach ($student->getEducations() as $education) {
+                $entityManager->persist($education);
+            }
+            
             $entityManager->persist($student);
             $entityManager->flush();
 

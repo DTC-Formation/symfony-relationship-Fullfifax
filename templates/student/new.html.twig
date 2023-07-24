@@ -5,12 +5,94 @@
 {% block body %}
     <h1>Create new Student</h1>
     
-    {{ form_start(form)}}
+    {{ form_start(form) }}
         {{ form_row(form.name) }}
-        {{ form_widget(form.address) }}
-        {{ form_widget(form.contact) }}
+        {{ form_row(form.address) }}
+        {{ form_row(form.contact) }}
+
+        <h2>Experiences</h2>
+        <div id="experiences" data-prototype="{{ form_row(form.experiences.vars.prototype)|e }}">
+            {% for experience in form.experiences %}
+                <div>
+                    {{ form_row(experience.startDate) }}
+                    {{ form_row(experience.endDate) }}
+                    {{ form_row(experience.post) }}
+                    <button type="button" data-delete-button>Delete</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="btn btn-primary" id="add_experience_button">Add Experience</button>
+
+        <h2>Education</h2>
+        <div id="educations" data-prototype="{{ form_row(form.educations.vars.prototype)|e }}">
+            {% for education in form.educations %}
+                <div>
+                    {{ form_row(education.diploma) }}
+                    {{ form_row(education.date) }}
+                    <button type="button" data-delete-button>Delete</button>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="button" class="btn btn-primary" id="add_education_button">Add education</button>
+        
         <button type="submit">Submit</button>
     {{ form_end(form) }}
 
     <a href="{{ path('app_student_index') }}">back to list</a>
+
+    <script>
+        // JavaScript code to handle adding and removing experiences
+        const addExperienceButton = document.getElementById('add_experience_button');
+        const experiencesContainer = document.getElementById('experiences');
+        let experienceIndex = {{ form.experiences|length }};
+
+        function addExperienceForm() {
+            const prototype = experiencesContainer.getAttribute('data-prototype');
+            const formHtml = prototype.replace(/__name__/g, experienceIndex);
+            experiencesContainer.insertAdjacentHTML('beforeend', formHtml);
+            experienceIndex++;
+        }
+
+        addExperienceButton.addEventListener('click', addExperienceForm);
+
+        experiencesContainer.addEventListener('click', (event) => {
+            if (event.target && event.target.dataset.deleteButton) {
+                const experienceForm = event.target.closest('div');
+                experienceForm.remove();
+            }
+        });
+
+        // Add any existing experiences (e.g., when editing a student)
+        {% for experienceForm in form.experiences %}
+            addExperienceForm();
+        {% endfor %}
+
+        // JavaScript code to handle adding and removing educations
+        const addEducationButton = document.getElementById('add_education_button');
+        const educationsContainer = document.getElementById('educations');
+        let educationIndex = {{ form.educations|length }};
+
+        function addEducationForm() {
+            const prototype = educationsContainer.getAttribute('data-prototype');
+            const formHtml = prototype.replace(/__name__/g, educationIndex);
+            educationsContainer.insertAdjacentHTML('beforeend', formHtml);
+            educationIndex++;
+        }
+
+        addEducationButton.addEventListener('click', addEducationForm);
+
+        educationsContainer.addEventListener('click', (event) => {
+            if (event.target && event.target.dataset.deleteButton) {
+                const educationForm = event.target.closest('div');
+                educationForm.remove();
+            }
+        });
+
+        // Add any existing educations (e.g., when editing a student)
+        {% for educationForm in form.educations %}
+            addEducationForm();
+        {% endfor %}
+    </script>
 {% endblock %}

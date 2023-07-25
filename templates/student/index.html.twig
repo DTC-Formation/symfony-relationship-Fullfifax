@@ -1,38 +1,60 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h2>Student Details</h2>
-    {% for student in students %}
-        <h4>Name: {{ student.name }}</h4>
 
-        <h4>Address</h4>
-        <p>Street: {{ student.address.lot }}</p>
-        <p>City: {{ student.address.city }}</p>
-        <p>Zip Code: {{ student.address.cp }}</p>
+<div class="container mt-3">
+    <h2 class="mb-4">Manage Students</h2>
+    <div class="d-flex justify-content-between mb-3">
+        <div>
+            <a href="{{ path('app_student_index') }}" class="btn btn-secondary">Back to list</a>
+            <a href="{{ path('app_student_new') }}" class="btn btn-primary">Create new</a>
+        </div>
+    </div>
 
-        <h4>Contact</h4>
-        <p>Email: {{ student.contact.email }}</p>
-        <p>Phone: {{ student.contact.phone }}</p>
-        <p>Phone: {{ student.contact.linkedin }}</p>
+    <div class="row">
+        {% for student in students %}
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ student.name }}</h5>
+                        <ul class="list-unstyled">
+                            <li><strong>Lot:</strong> {{ student.address.lot }}</li>
+                            <li><strong>City:</strong> {{ student.address.city }}</li>
+                            <li><strong>CP:</strong> {{ student.address.cp }}</li>
+                            <li><strong>Email:</strong> {{ student.contact.email }}</li>
+                            <li><strong>Linkedin:</strong> {{ student.contact.linkedin }}</li>
+                            <li><strong>Phone:</strong> {{ student.contact.phone }}</li>
+                        </ul>
 
-        <h4>Experiences</h4>
-        <ul>
-            {% for experience in student.experiences %}
-                <li>
-                    <p>Start Date: {{ experience.startDate|date('Y-m-d') }}</p>
-                    <p>End Date: {{ experience.endDate != 'N/A' ? experience.endDate|date('Y-m-d') : 'N/A' }}</p>
-                    <p>Post: {{ experience.post }}</p>
-                </li>
-            {% endfor %}
-        </ul>
+                        <h6>Experiences:</h6>
+                        <ul>
+                            {% for experience in student.experiences %}
+                                <li>
+                                    {{ experience.startDate|date('Y-m-d') }} -
+                                    {{ experience.endDate != 'N/A' ? experience.endDate|date('Y-m-d') : 'N/A' }}
+                                    {{ experience.post }}
+                                </li>
+                            {% endfor %}
+                        </ul>
 
-        <a href="{{ path('app_student_show', {'uid': student.uid}) }}">show</a>
-        <a href="{{ path('app_student_edit', {'uid': student.uid}) }}">edit</a>
+                        <h6>Educations:</h6>
+                        <ul>
+                            {% for education in student.educations %}
+                                <li>
+                                    {{ education.date|date('Y-m-d') }} - {{ education.diploma }}
+                                </li>
+                            {% endfor %}
+                        </ul>
 
-        <hr>
-    {% endfor %}
+                        <div class="text-right">
+                            <a href="{{ path('app_student_show', {'uid': student.uid}) }}" class="btn btn-info">Show</a>
+                            <a href="{{ path('app_student_edit', {'uid': student.uid}) }}" class="btn btn-primary">Edit</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 
-    <a href="{{ path('app_student_index') }}">Back to list</a>
-
-    <a href="{{ path('app_student_new') }}">Create new</a>
 {% endblock %}

@@ -13,10 +13,16 @@ class EducationType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+        $inputStyle = 'form-control my-2 w-50';
+        $dateInputStyle = 'form-control my-2 w-25';
+
         $builder
-            ->add('diploma', TextType::class)
+            ->add('diploma', TextType::class, [
+                'attr' => ['class' => $inputStyle],
+            ])
             ->add('date', DateType::class, [
                 'widget' => 'single_text',
+                'attr' => ['class' => $dateInputStyle],
             ])
         ;
     }

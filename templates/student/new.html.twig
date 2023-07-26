@@ -4,11 +4,16 @@
 
 {% block body %}
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center text-white">
         <div class="col-md-8">
-            <h2 class="mb-4 mt-3">Create New Student</h2>
+            <div class="d-flex align-items-center">
+                <a href="{{ path('app_student_index') }}">
+                    <img src="{{ asset('icons/back.png') }}" class="icon-small" alt="back" />
+                </a>
+                <h2 class="my-2 mx-4">Create New Student</h2>
+            </div>
             {{ form_start(form) }}
-            <div class="mb-3">
+            <div class="my-3">
                 <label for="{{ form.name.vars.id }}" class="form-label">Name</label>
                 {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
             </div>
@@ -21,46 +26,46 @@
                 {{ form_widget(form.contact, {'attr': {'class': 'form-control'}}) }}
             </div>
 
-            <h2>Experiences</h2>
-            <div id="experiences" data-prototype="{{ form_row(form.experiences.vars.prototype)|e }}">
+            <h4>Experiences</h4>
+            <div id="experiences" class="form-control" data-prototype="{{ form_widget(form.experiences.vars.prototype)|e }}">
                 {% for experience in form.experiences %}
-                <div class="mb-3">
-                    <label for="{{ experience.startDate.vars.id }}" class="form-label">Start Date</label>
-                    {{ form_widget(experience.startDate, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="mb-3">
-                    <label for="{{ experience.endDate.vars.id }}" class="form-label">End Date</label>
-                    {{ form_widget(experience.endDate, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="mb-3">
-                    <label for="{{ experience.post.vars.id }}" class="form-label">Post</label>
-                    {{ form_widget(experience.post, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <button type="button" class="btn btn-danger mt-3" data-delete-button>Delete</button>
+                    <div class="experience-row mb-3">
+                        <label for="{{ experience.startDate.vars.id }}" class="form-label">Start Date</label>
+                        {{ form_widget(experience.startDate, {'attr': {'class': 'form-control'}}) }}
+
+                        <label for="{{ experience.endDate.vars.id }}" class="form-label">End Date</label>
+                        {{ form_widget(experience.endDate, {'attr': {'class': 'form-control'}}) }}
+
+                        <label for="{{ experience.post.vars.id }}" class="form-label">Post</label>
+                        {{ form_widget(experience.post, {'attr': {'class': 'form-control'}}) }}
+
+                        <button type="button" class="btn btn-danger mt-3" data-delete-button="true">Delete</button>
+                        <hr>
+                    </div>
                 {% endfor %}
             </div>
 
             <button type="button" class="btn btn-primary mt-3" id="add_experience_button">Add Experience</button>
 
-            <h2>Educations</h2>
-            <div id="educations" data-prototype="{{ form_row(form.educations.vars.prototype)|e }}">
+            <h4 class="mt-3">Educations</h4>
+            <div id="educations" class="form-control" data-prototype="{{ form_widget(form.educations.vars.prototype)|e }}">
                 {% for education in form.educations %}
-                <div class="mb-3">
-                    <label for="{{ education.diploma.vars.id }}" class="form-label">Diploma</label>
-                    {{ form_widget(education.diploma, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="mb-3">
-                    <label for="{{ education.date.vars.id }}" class="form-label">Date</label>
-                    {{ form_widget(education.date, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <button type="button" class="btn btn-danger mt-3" data-delete-button>Delete</button>
+                    <div class="education-row mb-3">
+                        <label for="{{ education.diploma.vars.id }}" class="form-label">Diploma</label>
+                        {{ form_widget(education.diploma, {'attr': {'class': 'form-control'}}) }}
+
+                        <label for="{{ education.date.vars.id }}" class="form-label">Date</label>
+                        {{ form_widget(education.date, {'attr': {'class': 'form-control'}}) }}
+
+                        <button type="button" class="btn btn-danger mt-3" data-delete-button="true">Delete</button>
+                        <hr>
+                    </div>
                 {% endfor %}
             </div>
 
             <button type="button" class="btn btn-primary mt-3" id="add_education_button">Add Education</button>
             <br>
             <button type="submit" class="btn btn-success mt-3">Submit</button>
-            <a href="{{ path('app_student_index') }}" class="btn btn-secondary mt-3">Back to List</a>
             {{ form_end(form) }}
         </div>
     </div>
@@ -75,22 +80,26 @@
     function addExperienceForm() {
         const prototype = experiencesContainer.getAttribute('data-prototype');
         const formHtml = prototype.replace(/__name__/g, experienceIndex);
-        experiencesContainer.insertAdjacentHTML('beforeend', formHtml);
+        const experienceDiv = document.createElement('div');
+        experienceDiv.classList.add('experience-row', 'mb-3');
+        experienceDiv.innerHTML = formHtml;
+        experiencesContainer.appendChild(experienceDiv);
         experienceIndex++;
+
+        // Add the delete button for the new experience if it exists
+        const deleteButton = experienceDiv.querySelector('[data-delete-button="true"]');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                experienceDiv.remove();
+            });
+        }
     }
 
     addExperienceButton.addEventListener('click', addExperienceForm);
 
-    experiencesContainer.addEventListener('click', (event) => {
-        if (event.target && event.target.dataset.deleteButton) {
-            const experienceForm = event.target.closest('div');
-            experienceForm.remove();
-        }
-    });
-
     // Add any existing experiences (e.g., when editing a student)
     {% for experienceForm in form.experiences %}
-    addExperienceForm();
+        addExperienceForm();
     {% endfor %}
 
     const addEducationButton = document.getElementById('add_education_button');
@@ -100,22 +109,26 @@
     function addEducationForm() {
         const prototype = educationsContainer.getAttribute('data-prototype');
         const formHtml = prototype.replace(/__name__/g, educationIndex);
-        educationsContainer.insertAdjacentHTML('beforeend', formHtml);
+        const educationDiv = document.createElement('div');
+        educationDiv.classList.add('education-row', 'mb-3');
+        educationDiv.innerHTML = formHtml;
+        educationsContainer.appendChild(educationDiv);
         educationIndex++;
+
+        // Add the delete button for the new education if it exists
+        const deleteButton = educationDiv.querySelector('[data-delete-button="true"]');
+        if (deleteButton) {
+            deleteButton.addEventListener('click', () => {
+                educationDiv.remove();
+            });
+        }
     }
 
     addEducationButton.addEventListener('click', addEducationForm);
 
-    educationsContainer.addEventListener('click', (event) => {
-        if (event.target && event.target.dataset.deleteButton) {
-            const educationForm = event.target.closest('div');
-            educationForm.remove();
-        }
-    });
-
     // Add any existing educations (e.g., when editing a student)
     {% for educationForm in form.educations %}
-    addEducationForm();
+        addEducationForm();
     {% endfor %}
 </script>
 {% endblock %}

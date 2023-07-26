@@ -1,1 +1,27 @@
 @import '~bootstrap/dist/css/bootstrap.css';
+
+body {
+    background-color: #173C9B;
+}
+
+.bg-blue {
+    background-color: #173C9B;
+}
+
+.bg-orange {
+    background-color: #E8AA42;
+}
+
+.btn-hover:hover {
+    color: #173C9B !important;
+    opacity: 0.7;
+}
+
+.icon-small {
+    height: 50px;
+    width: 50px;
+}
+
+.text-blue {
+    color: #173C9B;
+}

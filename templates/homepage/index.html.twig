@@ -3,5 +3,14 @@
 {% block title %}Homepage exo{% endblock %}
 
 {% block body %}
-    <a href={{ path('app_student_index')}}>Formulera</a>
+    <div class="container mt-5">
+        <a href={{ path('app_student_index')}} class="text-decoration-none">
+            <div class="bg-orange card text-white w-25">
+                <div class="card-body">
+                <h4 class="card-title fw-bold">Formmulera</h4>
+                <p class="card-text">Embedding forms using CollectionType</p>
+                </div>
+            </div>
+        </a>
+    </div>
 {% endblock %}

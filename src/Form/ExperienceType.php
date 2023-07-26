@@ -13,14 +13,17 @@ class ExperienceType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $inputStyle = 'form-control';
+        $inputStyle = 'form-control my-2 w-50';
+        $dateInputStyle = 'form-control my-2 w-25';
 
         $builder
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
+                'attr' => ['class' => $dateInputStyle],
             ])
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
+                'attr' => ['class' => $dateInputStyle],
             ])
             ->add('post', TextType::class, [
                 'attr' => [

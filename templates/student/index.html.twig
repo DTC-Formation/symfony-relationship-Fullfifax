@@ -3,14 +3,15 @@
 {% block body %}
 
 <div class="container mt-3">
-    <h2 class="mb-4">Manage Students</h2>
-    <div class="d-flex justify-content-between mb-3">
-        <div>
-            <a href="{{ path('app_student_index') }}" class="btn btn-secondary">Back to list</a>
-            <a href="{{ path('app_student_new') }}" class="btn btn-primary">Create new</a>
+    <div class="d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center mb-3">
+            <a href="{{ path('app_homepage') }}" class="mx-3">
+                <img src="{{ asset('icons/back.png') }}" class="icon-small" alt="back" />
+            </a>
+            <h2 class="text-white">Manage Students</h2>
         </div>
+        <a href="{{ path('app_student_new') }}" class="btn bg-orange mb-3 text-white">Create new</a>
     </div>
-
     <div class="row">
         {% for student in students %}
             <div class="col-md-6 mb-4">
@@ -48,8 +49,8 @@
                         </ul>
 
                         <div class="text-right">
-                            <a href="{{ path('app_student_show', {'uid': student.uid}) }}" class="btn btn-info">Show</a>
-                            <a href="{{ path('app_student_edit', {'uid': student.uid}) }}" class="btn btn-primary">Edit</a>
+                            <a href="{{ path('app_student_show', {'uid': student.uid}) }}" class="btn btn-hover bg-blue text-white">Show</a>
+                            <a href="{{ path('app_student_edit', {'uid': student.uid}) }}" class="btn btn-hover bg-orange text-white">Edit</a>
                         </div>
                     </div>
                 </div>

@@ -25,3 +25,14 @@ body {
 .text-blue {
     color: #173C9B;
 }
+
+.zoom {
+    transition: transform .6s;
+}
+
+.zoom:hover {
+    cursor: pointer;
+    -ms-transform: scale(1.1);
+    transform: scale(1.1); 
+    -webkit-transform: scale(1.1);
+}

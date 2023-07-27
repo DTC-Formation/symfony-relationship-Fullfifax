@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Student;
 use App\Form\StudentType;
+use App\Manager\StudentManager;
 use App\Repository\StudentRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,24 +23,14 @@ class StudentController extends AbstractController
     }
 
     #[Route('/new', name: 'app_student_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request, StudentManager $studentManager): Response
     {
         $student = new Student();
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            foreach ($student->getExperiences() as $experience) {
-                $entityManager->persist($experience);
-            }
-
-            foreach ($student->getEducations() as $education) {
-                $entityManager->persist($education);
-            }
-            
-            $entityManager->persist($student);
-            $entityManager->flush();
+            $studentManager->saveStudent($student);
 
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -60,14 +50,13 @@ class StudentController extends AbstractController
     }
 
     #[Route('/{uid}/edit', name: 'app_student_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Student $student, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Student $student, StudentManager $studentManager): Response
     {
         $form = $this->createForm(StudentType::class, $student);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
+            $studentManager->saveStudent($student);
             return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -78,11 +67,10 @@ class StudentController extends AbstractController
     }
 
     #[Route('/{uid}', name: 'app_student_delete', methods: ['POST'])]
-    public function delete(Request $request, Student $student, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Student $student, StudentManager $studentManager): Response
     {
         if ($this->isCsrfTokenValid('delete'.$student->getUid(), $request->request->get('_token'))) {
-            $entityManager->remove($student);
-            $entityManager->flush();
+            $studentManager->deleteStudent($student);
         }
 
         return $this->redirectToRoute('app_student_index', [], Response::HTTP_SEE_OTHER);

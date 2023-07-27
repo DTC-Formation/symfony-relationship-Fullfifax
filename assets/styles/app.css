@@ -26,6 +26,10 @@ body {
     color: #173C9B;
 }
 
+.text-orange {
+    color: #E8AA42;
+}
+
 .zoom {
     transition: transform .6s;
 }

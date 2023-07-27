@@ -39,8 +39,6 @@
                         <label for="{{ experience.post.vars.id }}" class="form-label">Post</label>
                         {{ form_widget(experience.post, {'attr': {'class': 'form-control'}}) }}
 
-                        <button type="button" class="btn btn-danger mt-3" data-delete-button="true">Delete</button>
-                        <hr>
                     </div>
                 {% endfor %}
             </div>
@@ -56,9 +54,7 @@
 
                         <label for="{{ education.date.vars.id }}" class="form-label">Date</label>
                         {{ form_widget(education.date, {'attr': {'class': 'form-control'}}) }}
-
-                        <button type="button" class="btn btn-danger mt-3" data-delete-button="true">Delete</button>
-                        <hr>
+                        
                     </div>
                 {% endfor %}
             </div>
@@ -83,16 +79,19 @@
         const experienceDiv = document.createElement('div');
         experienceDiv.classList.add('experience-row', 'mb-3');
         experienceDiv.innerHTML = formHtml;
+
+        // Add the delete button for the new experience
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-danger mt-3 w-100';
+        deleteButton.innerText = 'Delete';
+        deleteButton.addEventListener('click', () => {
+            experienceDiv.remove();
+        });
+        experienceDiv.appendChild(deleteButton);
+
         experiencesContainer.appendChild(experienceDiv);
         experienceIndex++;
-
-        // Add the delete button for the new experience if it exists
-        const deleteButton = experienceDiv.querySelector('[data-delete-button="true"]');
-        if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-                experienceDiv.remove();
-            });
-        }
     }
 
     addExperienceButton.addEventListener('click', addExperienceForm);
@@ -112,16 +111,19 @@
         const educationDiv = document.createElement('div');
         educationDiv.classList.add('education-row', 'mb-3');
         educationDiv.innerHTML = formHtml;
+
+        // Add the delete button for the new education
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'btn btn-danger mt-3 w-100';
+        deleteButton.innerText = 'Delete';
+        deleteButton.addEventListener('click', () => {
+            educationDiv.remove();
+        });
+        educationDiv.appendChild(deleteButton);
+
         educationsContainer.appendChild(educationDiv);
         educationIndex++;
-
-        // Add the delete button for the new education if it exists
-        const deleteButton = educationDiv.querySelector('[data-delete-button="true"]');
-        if (deleteButton) {
-            deleteButton.addEventListener('click', () => {
-                educationDiv.remove();
-            });
-        }
     }
 
     addEducationButton.addEventListener('click', addEducationForm);

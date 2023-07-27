@@ -17,21 +17,21 @@
             <div class="col-md-6 mb-4">
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ student.name }}</h5>
+                        <h5 class="card-title fw-bold text-blue">{{ student.name }}</h5>
                         <ul class="list-unstyled">
-                            <li><strong>Id:</strong> {{ student.uid }}</li>
-                            <li><strong>Lot:</strong> {{ student.address.lot }}</li>
-                            <li><strong>City:</strong> {{ student.address.city }}</li>
-                            <li><strong>CP:</strong> {{ student.address.cp }}</li>
-                            <li><strong>Email:</strong> {{ student.contact.email }}</li>
-                            <li><strong>Linkedin:</strong> {{ student.contact.linkedin }}</li>
-                            <li><strong>Phone:</strong> {{ student.contact.phone }}</li>
+                            <li class="text-blue"><strong class="text-orange">Id:</strong> {{ student.uid }}</li>
+                            <li class="text-blue"><strong class="text-orange">Lot:</strong> {{ student.address.lot }}</li>
+                            <li class="text-blue"><strong class="text-orange">City:</strong> {{ student.address.city }}</li>
+                            <li class="text-blue"><strong class="text-orange">CP:</strong> {{ student.address.cp }}</li>
+                            <li class="text-blue"><strong class="text-orange">Email:</strong> {{ student.contact.email }}</li>
+                            <li class="text-blue"><strong class="text-orange">Linkedin:</strong> {{ student.contact.linkedin }}</li>
+                            <li class="text-blue"><strong class="text-orange">Phone:</strong> {{ student.contact.phone }}</li>
                         </ul>
 
-                        <h6>Experiences:</h6>
+                        <h6 class="fw-bold text-orange">Experiences:</h6>
                         <ul>
                             {% for experience in student.experiences %}
-                                <li>
+                                <li class="text-blue">
                                     {{ experience.startDate|date('Y-m-d') }} -
                                     {{ experience.endDate != 'N/A' ? experience.endDate|date('Y-m-d') : 'N/A' }}
                                     {{ experience.post }}
@@ -39,10 +39,10 @@
                             {% endfor %}
                         </ul>
 
-                        <h6>Educations:</h6>
+                        <h6 class="fw-bold text-orange">Educations:</h6>
                         <ul>
                             {% for education in student.educations %}
-                                <li>
+                                <li class="text-blue">
                                     {{ education.date|date('Y-m-d') }} - {{ education.diploma }}
                                 </li>
                             {% endfor %}

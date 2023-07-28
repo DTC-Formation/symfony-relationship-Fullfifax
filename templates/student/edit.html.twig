@@ -22,14 +22,17 @@
                 <div class="my-3">
                     <label for="{{ form.name.vars.id }}" class="form-label">Name</label>
                     {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                    <div class="error-message">{{ form_errors(form.name) }}</div>
                 </div>
                 <div class="mb-3">
                     <label for="{{ form.address.vars.id }}" class="form-label">Address</label>
                     {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
+                    <div class="error-message">{{ form_errors(form.address) }}</div>
                 </div>
                 <div class="mb-3">
                     <label for="{{ form.contact.vars.id }}" class="form-label">Contact</label>
                     {{ form_widget(form.contact, {'attr': {'class': 'form-control'}}) }}
+                    <div class="error-message">{{ form_errors(form.contact) }}</div>
                 </div>
 
                 <div id="experiences" class="form-control" data-prototype="{{ form_widget(form.experiences.vars.prototype)|e }}">
@@ -41,12 +44,16 @@
                         <div class="experience-row mb-3">
                             <label for="{{ experience.startDate.vars.id }}" class="form-label">Start Date</label>
                             {{ form_widget(experience.startDate, {'attr': {'class': 'form-control'}}) }}
+                            <div class="error-message">{{ form_errors(experience.startDate) }}</div>
 
                             <label for="{{ experience.endDate.vars.id }}" class="form-label">End Date</label>
                             {{ form_widget(experience.endDate, {'attr': {'class': 'form-control'}}) }}
+                            <div class="error-message">{{ form_errors(experience.endDate) }}</div>
 
                             <label for="{{ experience.post.vars.id }}" class="form-label">Post</label>
                             {{ form_widget(experience.post, {'attr': {'class': 'form-control'}}) }}
+                            <div class="error-message">{{ form_errors(experience.post) }}</div>
+
                             <button type="button" class="btn btn-danger mt-3 w-100" data-delete-button="true">Delete</button>
                             <hr>
                         </div>
@@ -63,9 +70,12 @@
                         <div class="education-row mb-3">
                             <label for="{{ education.diploma.vars.id }}" class="form-label">Diploma</label>
                             {{ form_widget(education.diploma, {'attr': {'class': 'form-control'}}) }}
+                            <div class="error-message">{{ form_errors(education.diploma) }}</div>
 
                             <label for="{{ education.date.vars.id }}" class="form-label">Date</label>
                             {{ form_widget(education.date, {'attr': {'class': 'form-control'}}) }}
+                            <div class="error-message">{{ form_errors(education.date) }}</div>
+
                             <button type="button" class="btn btn-danger mt-3 w-100" data-delete-button="true">Delete</button>
                             <hr>
                         </div>

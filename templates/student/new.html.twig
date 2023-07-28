@@ -16,14 +16,17 @@
             <div class="my-3">
                 <label for="{{ form.name.vars.id }}" class="form-label">Name</label>
                 {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+                <div class="error-message">{{ form_errors(form.name) }}</div>
             </div>
             <div class="mb-3">
                 <label for="{{ form.address.vars.id }}" class="form-label">Address</label>
                 {{ form_widget(form.address, {'attr': {'class': 'form-control'}}) }}
+                <div class="error-message">{{ form_errors(form.address) }}</div>
             </div>
             <div class="mb-3">
                 <label for="{{ form.contact.vars.id }}" class="form-label">Contact</label>
                 {{ form_widget(form.contact, {'attr': {'class': 'form-control'}}) }}
+                <div class="error-message">{{ form_errors(form.contact) }}</div>
             </div>
 
             <h4>Experiences</h4>
@@ -32,13 +35,15 @@
                     <div class="experience-row mb-3">
                         <label for="{{ experience.startDate.vars.id }}" class="form-label">Start Date</label>
                         {{ form_widget(experience.startDate, {'attr': {'class': 'form-control'}}) }}
-
+                        <div class="error-message">{{ form_errors(experience.startDate) }}</div>
+                        
                         <label for="{{ experience.endDate.vars.id }}" class="form-label">End Date</label>
                         {{ form_widget(experience.endDate, {'attr': {'class': 'form-control'}}) }}
+                        <div class="error-message">{{ form_errors(experience.endDate) }}</div>
 
                         <label for="{{ experience.post.vars.id }}" class="form-label">Post</label>
                         {{ form_widget(experience.post, {'attr': {'class': 'form-control'}}) }}
-
+                        <div class="error-message">{{ form_errors(experience.post) }}</div>
                     </div>
                 {% endfor %}
             </div>
@@ -51,10 +56,11 @@
                     <div class="education-row mb-3">
                         <label for="{{ education.diploma.vars.id }}" class="form-label">Diploma</label>
                         {{ form_widget(education.diploma, {'attr': {'class': 'form-control'}}) }}
+                        <div class="error-message">{{ form_errors(education.diploma) }}</div>
 
                         <label for="{{ education.date.vars.id }}" class="form-label">Date</label>
                         {{ form_widget(education.date, {'attr': {'class': 'form-control'}}) }}
-                        
+                        <div class="error-message">{{ form_errors(education.date) }}</div>
                     </div>
                 {% endfor %}
             </div>
@@ -96,10 +102,6 @@
 
     addExperienceButton.addEventListener('click', addExperienceForm);
 
-    // Add any existing experiences (e.g., when editing a student)
-    {% for experienceForm in form.experiences %}
-        addExperienceForm();
-    {% endfor %}
 
     const addEducationButton = document.getElementById('add_education_button');
     const educationsContainer = document.getElementById('educations');
@@ -127,10 +129,5 @@
     }
 
     addEducationButton.addEventListener('click', addEducationForm);
-
-    // Add any existing educations (e.g., when editing a student)
-    {% for educationForm in form.educations %}
-        addEducationForm();
-    {% endfor %}
 </script>
 {% endblock %}

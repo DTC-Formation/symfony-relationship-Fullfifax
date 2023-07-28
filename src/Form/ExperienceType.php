@@ -8,6 +8,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 class ExperienceType extends AbstractType
 {
@@ -20,15 +22,29 @@ class ExperienceType extends AbstractType
             ->add('startDate', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => ['class' => $dateInputStyle],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please fill this field',
+                    ]),
+                ],
             ])
             ->add('endDate', DateType::class, [
                 'widget' => 'single_text',
                 'attr' => ['class' => $dateInputStyle],
+                'constraints' => [
+                    new GreaterThanOrEqual([
+                        'message' => 'Verify the end date',
+                        'propertyPath' => 'parent.all[startDate].data',
+                    ]),
+                ],
             ])
             ->add('post', TextType::class, [
                 'attr' => [
                     'class' => $inputStyle,
-                ]
+                ],
+                'constraints' => [
+                    new NotBlank(),
+                ],
             ])
         ;
     }

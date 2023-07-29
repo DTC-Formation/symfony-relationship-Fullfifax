@@ -6,6 +6,7 @@ use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
@@ -14,18 +15,23 @@ class Student
     #[ORM\Id]
     #[ORM\Column(type:"uuid", unique:true)]
     #[ORM\CustomIdGenerator(class: 'doctrine.uuid_generator')]
+    #[Groups('listing')]
     private ?Uuid $uid;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['listing', 'details'])]
     private ?string $name = null;
 
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    #[Groups('listing')]
     private ?Address $address = null;
 
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
+    #[Groups('listing')]
     private ?Contact $contact = null;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Experience::class, orphanRemoval: true)]
+    #[Groups('listing')]
     private Collection $experiences;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Education::class, orphanRemoval: true)]
@@ -148,4 +154,5 @@ class Student
 
         return $this;
     }
+
 }

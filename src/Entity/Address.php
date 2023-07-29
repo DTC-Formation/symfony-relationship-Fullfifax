@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\AddressRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: AddressRepository::class)]
 class Address
@@ -14,12 +15,15 @@ class Address
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $lot = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $city = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $cp = null;
 
     #[ORM\OneToOne(inversedBy: 'address', cascade: ['persist', 'remove'])]

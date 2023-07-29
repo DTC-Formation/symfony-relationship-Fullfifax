@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ExperienceRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ExperienceRepository::class)]
 class Experience
@@ -15,12 +16,15 @@ class Experience
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Groups('listing')]
     private ?\DateTimeInterface $startDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Groups('listing')]
     private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $post = null;
 
     #[ORM\ManyToOne(inversedBy: 'experiences')]

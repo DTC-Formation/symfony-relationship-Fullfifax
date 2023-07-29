@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ContactRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
@@ -14,12 +15,15 @@ class Contact
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups('listing')]
     private ?string $linkedin = null;
 
     #[ORM\OneToOne(inversedBy: 'contact', cascade: ['persist', 'remove'])]

@@ -44,9 +44,9 @@ class Student
         $this->educations = new ArrayCollection();
     }
 
-    public function getUid(): ?Uuid
+    public function getUid(): ?string
     {
-        return $this->uid;
+        return $this->uid ? (string) $this->uid : null;
     }
 
     public function getName(): ?string

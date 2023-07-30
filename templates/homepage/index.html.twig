@@ -3,14 +3,22 @@
 {% block title %}Homepage exo{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <a href={{ path('app_student_index')}} class="text-decoration-none">
-            <div class="bg-orange card text-white w-25 zoom">
+    <div class="container d-flex mt-5 justify-content-between">
+        <div class="bg-orange card w-25 zoom">
+            <a href={{ path('app_student_index')}} class="text-decoration-none text-white">
                 <div class="card-body">
-                <h4 class="card-title fw-bold">Formmulera</h4>
-                <p class="card-text">Embedding forms using CollectionType</p>
+                    <h4 class="card-title fw-bold">Formmulera</h4>
+                    <p class="card-text">Embedding forms using CollectionType</p>
                 </div>
+            </a>
+        </div>
+        <div class="bg-orange card w-25 zoom">
+            <a href={{ path('app_student_listing')}} class="text-decoration-none text-white">
+            <div class="card-body">
+                <h4 class="card-title fw-bold">API</h4>
+                <p class="card-text">Use api</p>
             </div>
-        </a>
+            </a>
+        </div>
     </div>
 {% endblock %}

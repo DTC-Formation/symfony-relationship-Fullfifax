@@ -27,6 +27,25 @@ body {
     width: 50px;
 }
 
+.pagination {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+}
+
+.pagination span a {
+    color: #E8AA42 !important;
+    font-weight: bold;
+    margin: 0 5px;
+    padding: 5px 10px;
+    text-decoration: none;
+}
+
+.pagination span a:active {
+    color: #173C9B !important;
+}
+
 .text-blue {
     color: #173C9B;
 }

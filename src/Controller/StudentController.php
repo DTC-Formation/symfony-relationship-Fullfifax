@@ -6,27 +6,28 @@ use App\Entity\Student;
 use App\Form\StudentType;
 use App\Manager\StudentManager;
 use App\Repository\StudentRepository;
-use Doctrine\Bundle\DoctrineBundle\Mapping\ClassMetadataFactory;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\Encoder\JsonEncoder;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
-use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
-use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
-use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/student')]
 class StudentController extends AbstractController
 {
     #[Route('/', name: 'app_student_index', methods: ['GET'])]
-    public function index(StudentRepository $studentRepository): Response
+    public function index(Request $request, PaginatorInterface $paginator, StudentRepository $studentRepository): Response
     {
+        $allStudentsQuery = $studentRepository->createQueryBuilder('s')->getQuery();
+
+        $students = $paginator->paginate(
+            $allStudentsQuery,
+            $request->query->getInt('page', 1), // Current page number, default is 1
+            10 // Number of items per page
+        );
+
         return $this->render('student/index.html.twig', [
-            'students' => $studentRepository->findAll(),
+            'students' => $students,
         ]);
     }
 

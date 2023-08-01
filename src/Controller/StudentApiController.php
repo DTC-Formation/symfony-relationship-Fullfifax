@@ -7,6 +7,7 @@ use App\Form\StudentType;
 use App\Helper\JsonResponseHelper;
 use App\Manager\StudentManager;
 use App\Repository\StudentRepository;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -42,8 +43,16 @@ class StudentApiController extends AbstractController
                 'status' => 'success'
             ]);
         }
+
+        $response = [
+            'code' => Response::HTTP_BAD_REQUEST,
+            'status' => 'error',
+            'message' => 'Not inspired for message for now',
+            'data' => $data,
+            'errors' => $this->getFormErrors($form)
+        ];
         
-        return $this->json($this->getFormErrors($form), Response::HTTP_BAD_REQUEST);
+        return $this->json($response, Response::HTTP_BAD_REQUEST);
         
     }
 
@@ -82,5 +91,32 @@ class StudentApiController extends AbstractController
                 'status' => 'success'
             ]
         );
+    }
+
+    #[Route('/edit/{uid}', name: 'editing', methods: ['GET', 'PUT'])]
+    public function editStudent(Request $request, string $uid, StudentManager $studentManager):  Response
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(['uid' => Uuid::fromString($uid)]);
+
+        if(!$student) {
+            return $this->json(['error' => 'Student not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        $form = $this->createForm(StudentType::class, $student);
+        $form->submit($data, false);
+
+        if($form->isSubmitted() && $form->isValid()) {
+            $studentManager->saveStudent($student);
+
+            return $this->json([
+                'code' => Response::HTTP_OK,
+                'status' => 'success',
+            ]);
+        }
+
+        return $this->json($this->getFormErrors($form), Response::HTTP_BAD_REQUEST);
+
     }
 }

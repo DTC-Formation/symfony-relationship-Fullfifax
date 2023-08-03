@@ -119,4 +119,21 @@ class StudentApiController extends AbstractController
         return $this->json($this->getFormErrors($form), Response::HTTP_BAD_REQUEST);
 
     }
+
+    #[Route('/delete/{uid}', name: 'deleting', methods:['DELETE'])]
+    public function deleteStudent(string $uid, StudentManager $studentManager)
+    {
+        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(['uid' => Uuid::fromString($uid)]);
+
+        if(!$student) {
+            return $this->json(['error' => 'Student not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $studentManager->deleteStudent($student);
+
+        return $this->json([
+            'code' => Response::HTTP_OK,
+            'status' => 'success',
+        ]);
+    }
 }

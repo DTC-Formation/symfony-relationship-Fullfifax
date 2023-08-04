@@ -59,7 +59,7 @@ class StudentApiController extends AbstractController
         
     }
 
-    #[Route('/list/{page}', name: 'listing', methods: ['GET'], requirements: ['page' => '\d+'])]
+    #[Route('/list/page={page}', name: 'listing', methods: ['GET'], requirements: ['page' => '\d+'])]
     public function listStudents(?int $page = 1): JsonResponse
     {
         $students = $this->studentRepository->findBy([], [], $page * 10);

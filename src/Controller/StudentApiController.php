@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Student;
 use App\Form\StudentType;
+use App\Helper\FormHelper;
 use App\Helper\JsonResponseHelper;
 use App\Manager\StudentManager;
 use App\Repository\StudentRepository;
@@ -18,11 +19,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class StudentApiController extends AbstractController
 {
     private $jsonResponseHelper;
+    private $formHelper;
     private $studentRepository;
 
-    public function __construct(StudentRepository $studentRepository, JsonResponseHelper $jsonResponseHelper)
+    public function __construct(StudentRepository $studentRepository, JsonResponseHelper $jsonResponseHelper, FormHelper $formHelper)
     {
         $this->jsonResponseHelper = $jsonResponseHelper;
+        $this->formHelper = $formHelper;
         $this->studentRepository = $studentRepository;
     }
 
@@ -49,34 +52,11 @@ class StudentApiController extends AbstractController
             'status' => 'error',
             'message' => 'Not inspired for message for now',
             'data' => $data,
-            'errors' => $this->getFormErrors($form)
+            'errors' => $this->formHelper->getFormErrors($form)
         ];
         
         return $this->json($response, Response::HTTP_BAD_REQUEST);
         
-    }
-
-    private function getFormErrors($form): array
-    {
-        $errors = [];
-
-        foreach ($form->getErrors(true, true) as $error) {
-            // Get the name of the form field that has the error
-            $fieldName = $error->getOrigin()->getName();
-
-            $errorMessage = $error->getMessage();
-
-            $errors[$fieldName][] = $errorMessage;
-        }
-
-        foreach ($form->all() as $name => $child) {
-            foreach ($child->getErrors(true, true) as $error) {
-                $errors[$name][] = $error->getMessage();
-            }
-        }
-    
-
-        return $errors;
     }
 
     #[Route('/list/{page}', name: 'listing', methods: ['GET'], requirements: ['page' => '\d+'])]
@@ -116,7 +96,7 @@ class StudentApiController extends AbstractController
             ]);
         }
 
-        return $this->json($this->getFormErrors($form), Response::HTTP_BAD_REQUEST);
+        return $this->json($this->formHelper->getFormErrors($form), Response::HTTP_BAD_REQUEST);
 
     }
 

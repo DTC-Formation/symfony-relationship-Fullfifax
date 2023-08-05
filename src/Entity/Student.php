@@ -30,8 +30,8 @@ class Student
     #[Groups('listing')]
     private ?Contact $contact = null;
 
-    #[ORM\OneToMany(mappedBy: 'student', targetEntity: Experience::class, orphanRemoval: true)]
-    #[Groups('listing')]
+    #[ORM\OneToMany(mappedBy: 'student', cascade: ['persist', 'remove'], targetEntity: Experience::class, orphanRemoval: true)]
+    #[Groups('listing', 'creating')]
     private Collection $experiences;
 
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Education::class, orphanRemoval: true)]

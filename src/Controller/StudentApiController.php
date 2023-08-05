@@ -8,6 +8,7 @@ use App\Helper\FormHelper;
 use App\Helper\JsonResponseHelper;
 use App\Manager\StudentManager;
 use App\Repository\StudentRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,41 +22,30 @@ class StudentApiController extends AbstractController
     private $jsonResponseHelper;
     private $formHelper;
     private $studentRepository;
+    private $entityManager;
 
-    public function __construct(StudentRepository $studentRepository, JsonResponseHelper $jsonResponseHelper, FormHelper $formHelper)
+    public function __construct(StudentRepository $studentRepository, JsonResponseHelper $jsonResponseHelper, FormHelper $formHelper, EntityManagerInterface $entityManager)
     {
         $this->jsonResponseHelper = $jsonResponseHelper;
         $this->formHelper = $formHelper;
         $this->studentRepository = $studentRepository;
+        $this->entityManager  = $entityManager;
     }
 
     #[Route('/create', name: 'creating', methods: ["GET", "POST"])]
-    public function createStudent(Request $request, StudentManager $studentManager): Response
+    public function createStudent(Request $request): Response
     {
-        $data = json_decode($request->getContent(), true);
-        $student = new Student();
 
-        $form = $this->createForm(StudentType::class, $student);
-        $form->submit($data);
+        $student = $this->jsonResponseHelper
+            ->configureSerializer(['listing'])
+            ->deserialize($request->getContent(), Student::class, 'json');
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $studentManager->saveStudent($student);
-
-            return $this->json([
-                'code' => Response::HTTP_CREATED,
-                'status' => 'success'
-            ]);
-        }
-
-        $response = [
-            'code' => Response::HTTP_BAD_REQUEST,
-            'status' => 'error',
-            'message' => 'Not inspired for message for now',
-            'data' => $data,
-            'errors' => $this->formHelper->getFormErrors($form)
-        ];
+        $this->entityManager->persist($student);
+        $this->entityManager->flush();
         
-        return $this->json($response, Response::HTTP_BAD_REQUEST);
+        return $this->json([
+            'message' => "success",
+        ]);
         
     }
 

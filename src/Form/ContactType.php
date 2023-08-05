@@ -28,7 +28,6 @@ class ContactType extends AbstractType
                 'constraints' => [
                     new NotBlank(),
                     new Regex([
-                        'pattern' => '/^\d+$/', // Regular expression to match only numeric digits
                         'message' => 'Please enter a valid phone number (numbers only).',
                     ]),
                     new Length(['min' => 10, 'max' => 20]),

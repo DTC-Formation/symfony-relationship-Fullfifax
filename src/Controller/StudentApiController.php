@@ -74,6 +74,7 @@ class StudentApiController extends AbstractController
             ->configureSerializer(['listing'])
             ->deserialize($data, Student::class, 'json');
 
+        $this->entityManager->persist($student);
         $this->entityManager->flush();
 
         return $this->json([

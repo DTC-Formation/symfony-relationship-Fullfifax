@@ -3,8 +3,6 @@
 namespace App\Controller;
 
 use App\Entity\Student;
-use App\Form\StudentType;
-use App\Helper\FormHelper;
 use App\Helper\JsonResponseHelper;
 use App\Manager\StudentManager;
 use App\Repository\StudentRepository;
@@ -20,14 +18,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class StudentApiController extends AbstractController
 {
     private $jsonResponseHelper;
-    private $formHelper;
     private $studentRepository;
     private $entityManager;
 
-    public function __construct(StudentRepository $studentRepository, JsonResponseHelper $jsonResponseHelper, FormHelper $formHelper, EntityManagerInterface $entityManager)
+    public function __construct(StudentRepository $studentRepository, JsonResponseHelper $jsonResponseHelper, EntityManagerInterface $entityManager)
     {
         $this->jsonResponseHelper = $jsonResponseHelper;
-        $this->formHelper = $formHelper;
         $this->studentRepository = $studentRepository;
         $this->entityManager  = $entityManager;
     }
@@ -64,7 +60,7 @@ class StudentApiController extends AbstractController
     }
 
     #[Route('/edit/{uid}', name: 'editing', methods: ['GET', 'PUT'])]
-    public function editStudent(Request $request, string $uid, StudentManager $studentManager):  Response
+    public function editStudent(Request $request, string $uid):  Response
     {
         $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(['uid' => Uuid::fromString($uid)]);
 
@@ -74,19 +70,16 @@ class StudentApiController extends AbstractController
 
         $data = json_decode($request->getContent(), true);
 
-        $form = $this->createForm(StudentType::class, $student);
-        $form->submit($data, false);
+        $student = $this->jsonResponseHelper
+            ->configureSerializer(['listing'])
+            ->deserialize($data, Student::class, 'json');
 
-        if($form->isSubmitted() && $form->isValid()) {
-            $studentManager->saveStudent($student);
+        $this->entityManager->flush();
 
-            return $this->json([
-                'code' => Response::HTTP_OK,
-                'status' => 'success',
-            ]);
-        }
-
-        return $this->json($this->formHelper->getFormErrors($form), Response::HTTP_BAD_REQUEST);
+        return $this->json([
+            'code' => Response::HTTP_OK,
+            'status' => 'success',
+        ]);
 
     }
 

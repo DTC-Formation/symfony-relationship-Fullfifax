@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 
 #[Route('/api/student', name: 'app_student_')]
 class StudentApiController extends AbstractController
@@ -62,19 +63,20 @@ class StudentApiController extends AbstractController
     #[Route('/edit/{uid}', name: 'editing', methods: ['GET', 'PUT'])]
     public function editStudent(Request $request, string $uid):  Response
     {
-        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(['uid' => Uuid::fromString($uid)]);
+        $student = $this->entityManager
+            ->getRepository(Student::class)
+            ->findOneBy(['uid' => Uuid::fromString($uid)]);
 
-        if(!$student) {
+        if (!$student) {
             return $this->json(['error' => 'Student not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $data = json_decode($request->getContent(), true);
+        $data = $request->getContent();
 
         $student = $this->jsonResponseHelper
             ->configureSerializer(['listing'])
-            ->deserialize($data, Student::class, 'json');
+            ->deserialize($data, Student::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $student]);
 
-        $this->entityManager->persist($student);
         $this->entityManager->flush();
 
         return $this->json([
@@ -87,7 +89,9 @@ class StudentApiController extends AbstractController
     #[Route('/delete/{uid}', name: 'deleting', methods:['DELETE'])]
     public function deleteStudent(string $uid, StudentManager $studentManager)
     {
-        $student = $this->getDoctrine()->getRepository(Student::class)->findOneBy(['uid' => Uuid::fromString($uid)]);
+        $student = $this->entityManager
+            ->getRepository(Student::class)
+            ->findOneBy(['uid' => Uuid::fromString($uid)]);
 
         if(!$student) {
             return $this->json(['error' => 'Student not found'], Response::HTTP_NOT_FOUND);

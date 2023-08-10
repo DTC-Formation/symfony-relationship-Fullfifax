@@ -72,10 +72,19 @@ class StudentApiController extends AbstractController
         }
 
         $data = $request->getContent();
+        $jsonData = json_decode($data, true);
 
-        $student = $this->jsonResponseHelper
-            ->configureSerializer(['listing'])
-            ->deserialize($data, Student::class, 'json', [AbstractNormalizer::OBJECT_TO_POPULATE => $student]);
+        $addressData = $jsonData['address'];
+
+        $existingAddress = $student->getAddress();
+
+        if ($existingAddress) {
+            $existingAddress->setLot($addressData['lot']);
+            $existingAddress->setCity($addressData['city']);
+            $existingAddress->setCp($addressData['cp']);
+
+            $this->entityManager->persist($existingAddress);
+        }
 
         $this->entityManager->flush();
 

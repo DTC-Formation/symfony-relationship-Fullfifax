@@ -27,7 +27,7 @@ class Address
     private ?string $cp = null;
 
     #[ORM\OneToOne(inversedBy: 'address', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:"student_uid", referencedColumnName:"uid", nullable: false)]
+    #[ORM\JoinColumn(name:"student_uid", referencedColumnName:"uid")]
     private ?Student $student = null;
 
     public function getId(): ?int

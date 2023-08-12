@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Student;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class StudentManager {
     private $entityManager;
@@ -31,5 +32,16 @@ class StudentManager {
     {
         $this->entityManager->remove($student);
         $this->entityManager->flush();
+    }
+
+    public function generateSuperAdmin(SymfonyStyle $style, string $adminName)
+    {
+        $student = new Student();
+        
+        $student->setName($adminName);
+
+        $this->saveStudent($student);
+
+        $style->success(sprintf("Admin student's name: %s", $student->getName()));
     }
 }

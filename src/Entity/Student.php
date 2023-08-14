@@ -6,11 +6,12 @@ use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-class Student
+class Student implements UserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type:"uuid", unique:true)]
@@ -153,6 +154,54 @@ class Student
         }
 
         return $this;
+    }
+
+    public function getRoles(): array
+    {  
+        return ['ROLE_STUDENT'];
+    }
+
+    public function getPassword()
+    {
+        
+    }
+
+    /**
+     * Returns the salt that was originally used to hash the password.
+     *
+     * This can return null if the password was not hashed using a salt.
+     *
+     * This method is deprecated since Symfony 5.3, implement it from {@link LegacyPasswordAuthenticatedUserInterface} instead.
+     *
+     * @return string|null
+     */
+    public function getSalt()
+    {
+
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+
+    }
+
+    /**
+     * @return string
+     */
+    public function getUsername()
+    {
+        
+    }
+
+    public function getUserIdentifier()
+    {
+        
     }
 
 }

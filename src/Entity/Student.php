@@ -23,6 +23,9 @@ class Student implements UserInterface
     #[Groups(['listing', 'details'])]
     private ?string $name = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
     #[ORM\OneToOne(mappedBy: 'student', cascade: ['persist', 'remove'])]
     #[Groups('listing')]
     private ?Address $address = null;
@@ -59,6 +62,17 @@ class Student implements UserInterface
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): self
+    {
+        $this->password = $password;
         return $this;
     }
 
@@ -159,11 +173,6 @@ class Student implements UserInterface
     public function getRoles(): array
     {  
         return ['ROLE_STUDENT'];
-    }
-
-    public function getPassword()
-    {
-        
     }
 
     /**

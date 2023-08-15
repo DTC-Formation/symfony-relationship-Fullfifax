@@ -32,10 +32,7 @@ class PopulateStudentPasswordsCommand extends Command
     
     protected function configure(): void
     {
-        $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
+        return;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -45,7 +42,6 @@ class PopulateStudentPasswordsCommand extends Command
 
         foreach ($students as $student) {
             $encodedPassword = $this->passwordEncoder->encodePassword($student, '12345678');
-            dd($encodedPassword);
             $student->setPassword($encodedPassword);
             $this->entityManager->persist($student);
         }

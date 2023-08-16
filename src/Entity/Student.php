@@ -41,6 +41,9 @@ class Student implements UserInterface
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Education::class, orphanRemoval: true)]
     private Collection $educations;
 
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     public function __construct()
     {
         $this->uid = Uuid::v4();
@@ -171,8 +174,15 @@ class Student implements UserInterface
     }
 
     public function getRoles(): array
-    {  
-        return ['ROLE_STUDENT'];
+    {
+        return $this->roles;
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
     }
 
     /**

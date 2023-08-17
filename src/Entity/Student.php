@@ -6,12 +6,13 @@ use App\Repository\StudentRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: StudentRepository::class)]
-class Student implements UserInterface
+class Student implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
     #[ORM\Column(type:"uuid", unique:true)]
@@ -22,6 +23,10 @@ class Student implements UserInterface
     #[ORM\Column(length: 255)]
     #[Groups(['listing', 'details'])]
     private ?string $name = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups('listing')]
+    private ?string $email = null;
 
     #[ORM\Column(length: 255)]
     private ?string $password = null;
@@ -41,8 +46,8 @@ class Student implements UserInterface
     #[ORM\OneToMany(mappedBy: 'student', targetEntity: Education::class, orphanRemoval: true)]
     private Collection $educations;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    #[ORM\Column(type: "json", nullable: true)]
+    private array $roles;
 
     public function __construct()
     {
@@ -64,6 +69,18 @@ class Student implements UserInterface
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }
@@ -185,42 +202,25 @@ class Student implements UserInterface
         return $this;
     }
 
-    /**
-     * Returns the salt that was originally used to hash the password.
-     *
-     * This can return null if the password was not hashed using a salt.
-     *
-     * This method is deprecated since Symfony 5.3, implement it from {@link LegacyPasswordAuthenticatedUserInterface} instead.
-     *
-     * @return string|null
-     */
     public function getSalt()
     {
-
+        return;
     }
 
-    /**
-     * Removes sensitive data from the user.
-     *
-     * This is important if, at any given point, sensitive information like
-     * the plain-text password is stored on this object.
-     */
+
     public function eraseCredentials()
     {
 
     }
 
-    /**
-     * @return string
-     */
     public function getUsername()
     {
-        
+        return $this->name;
     }
 
-    public function getUserIdentifier()
+    public function getUserIdentifier(): string
     {
-        
+        return (string) $this->email;
     }
 
 }

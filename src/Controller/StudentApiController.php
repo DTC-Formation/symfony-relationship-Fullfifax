@@ -62,10 +62,11 @@ class StudentApiController extends AbstractController
     #[Route('/edit/{uid}', name: 'editing', methods: ['GET', 'PUT'])]
     public function editStudent(Request $request, string $uid):  Response
     {
+
         $student = $this->entityManager
             ->getRepository(Student::class)
             ->findOneBy(['uid' => Uuid::fromString($uid)]);
-
+        
         if (!$student) {
             return $this->json(['error' => 'Student not found'], Response::HTTP_NOT_FOUND);
         }
